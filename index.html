@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Recycle Earth Impact — Plastic-to-Purpose Dashboard</title>
+<meta name="description" content="Impact dashboard for Project Recycle Earth, a youth-led plastic diversion pilot across three Dhaka schools, coordinated by BRAC University students.">
+<meta name="theme-color" content="#1B4F9C">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%231E9E5A'/%3E%3Cpath d='M6 12a6 6 0 1 0 6-6M6 12l2.7-1.3M6 12l1.3 2.7' fill='none' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#10233F;
+    --paper:#F5F6F2;
+    --paper-dim:#ECEEE8;
+    --card:#FFFFFF;
+    --bracu-blue:#1B4F9C;
+    --bracu-blue-dim:#e8eef8;
+    --eco-green:#1E9E5A;
+    --eco-green-dim:#e5f6ec;
+    --coral:#FF5A36;
+    --coral-dim:#ffece6;
+    --gold:#E8A93B;
+    --gold-dim:#fdf3df;
+    --line:rgba(16,35,63,0.10);
+    --line-strong:rgba(16,35,63,0.18);
+    --muted:#5B6B82;
+    --radius:14px;
+    --disp:'Space Grotesk', system-ui, sans-serif;
+    --body:'Inter', system-ui, sans-serif;
+    --mono:'IBM Plex Mono', ui-monospace, monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--coral); color:#fff;}
+
+  a{color:inherit;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 28px;}
+  :focus-visible{outline:2px solid var(--bracu-blue); outline-offset:2px;}
+
+  /* ---------- Header ---------- */
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:rgba(245,246,242,0.88);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .top-inner{
+    display:flex; align-items:center; justify-content:space-between; gap:14px;
+    padding:14px 28px; max-width:1180px; margin:0 auto;
+  }
+  .brandrow{display:flex; align-items:center; gap:14px;}
+  .logo-mark{
+    width:40px; height:40px; border-radius:10px;
+    background:#fff; border:1px solid var(--line); padding:3px;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--bracu-blue); font-family:var(--disp); font-weight:700; font-size:14px;
+    flex-shrink:0; overflow:hidden;
+  }
+  .logo-mark img{width:100%; height:100%; object-fit:contain;}
+  .brandtext{display:flex; flex-direction:column; line-height:1.15;}
+  .brandtext .b1{font-family:var(--disp); font-weight:600; font-size:15px;}
+  .brandtext .b2{font-size:11.5px; color:var(--muted);}
+  .top-right{display:flex; align-items:center; gap:18px;}
+  .pill{
+    font-family:var(--mono); font-size:11.5px; letter-spacing:0.02em;
+    padding:6px 12px; border-radius:100px; background:var(--eco-green-dim);
+    color:var(--eco-green); border:1px solid rgba(30,158,90,0.25);
+    display:flex; align-items:center; gap:6px; white-space:nowrap;
+  }
+  .pill .dot{width:6px; height:6px; border-radius:50%; background:var(--eco-green); animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:0.35;}}
+
+  /* ---------- Hero / top-fold ---------- */
+  .hero{padding:44px 0 8px;}
+  .hero-head{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    flex-wrap:wrap; gap:18px; margin-bottom:28px;
+  }
+  .eyebrow{
+    font-family:var(--mono); font-size:11.5px; text-transform:uppercase;
+    letter-spacing:0.12em; color:var(--bracu-blue); margin-bottom:10px;
+    display:flex; align-items:center; gap:10px;
+  }
+  h1{
+    font-family:var(--disp); font-weight:600; font-size:clamp(28px,3.6vw,42px);
+    letter-spacing:-0.01em; max-width:640px;
+  }
+  .hero-sub{color:var(--muted); max-width:480px; font-size:14.5px; margin-top:10px;}
+
+  .timeline-chip{
+    display:flex; flex-direction:column; align-items:flex-end; gap:8px;
+    text-align:right;
+  }
+  .timeline-track{
+    width:220px; height:8px; border-radius:100px; background:var(--line-strong);
+    position:relative; overflow:hidden;
+  }
+  .timeline-fill{
+    position:absolute; left:0; top:0; height:100%; border-radius:100px;
+    background:linear-gradient(90deg, var(--bracu-blue), var(--eco-green));
+    width:0;
+  }
+  .timeline-label{font-family:var(--mono); font-size:12px; color:var(--muted);}
+  .timeline-label b{color:var(--ink); font-weight:600;}
+
+  /* ---------- Metric cards ---------- */
+  .cards{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:14px;
+  }
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:22px 20px; position:relative; overflow:hidden;
+    transition:transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .card:hover{transform:translateY(-3px); box-shadow:0 14px 30px -18px rgba(16,35,63,0.35);}
+  .card .icon{
+    width:34px; height:34px; border-radius:9px; display:flex; align-items:center;
+    justify-content:center; margin-bottom:16px;
+  }
+  .card .icon svg{width:18px; height:18px;}
+  .card .label{font-size:12.5px; color:var(--muted); font-weight:500; margin-bottom:6px;}
+  .card .value{
+    font-family:var(--disp); font-weight:600; font-size:30px; letter-spacing:-0.01em;
+    display:flex; align-items:baseline; gap:6px; font-variant-numeric:tabular-nums;
+  }
+  .card .value .unit{font-size:14px; color:var(--muted); font-weight:500;}
+  .card .foot{font-size:12px; color:var(--muted); margin-top:10px; display:flex; align-items:center; gap:6px;}
+  .card .foot.up{color:var(--eco-green);}
+  .est-tag{
+    font-family:var(--mono); font-size:9.5px; text-transform:uppercase; letter-spacing:0.06em;
+    background:var(--gold-dim); color:#8a6d00; padding:2px 6px; border-radius:5px; margin-left:6px;
+    position:relative; top:-2px;
+  }
+  .c1 .icon{background:var(--eco-green-dim); color:var(--eco-green);}
+  .c2 .icon{background:var(--bracu-blue-dim); color:var(--bracu-blue);}
+  .c3 .icon{background:var(--gold-dim); color:#a17a1c;}
+  .c4 .icon{background:var(--coral-dim); color:var(--coral);}
+
+  .equiv-row{
+    display:flex; gap:16px; flex-wrap:wrap; margin-bottom:56px;
+  }
+  .equiv-chip{
+    flex:1; min-width:260px;
+    background:var(--paper-dim); border:1px dashed var(--line-strong); border-radius:12px;
+    padding:14px 18px; display:flex; align-items:center; gap:14px;
+  }
+  .equiv-chip .num{font-family:var(--mono); font-weight:600; font-size:15px; color:var(--ink); white-space:nowrap;}
+  .equiv-chip .txt{font-size:12.5px; color:var(--muted);}
+
+  /* ---------- Section shell ---------- */
+  section{padding:56px 0;}
+  section + section{border-top:1px solid var(--line);}
+  .sec-head{margin-bottom:28px; max-width:640px;}
+  .sec-eyebrow{
+    font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.1em;
+    color:var(--muted); margin-bottom:8px;
+  }
+  .sec-title{font-family:var(--disp); font-weight:600; font-size:24px; margin-bottom:8px;}
+  .sec-desc{color:var(--muted); font-size:14px;}
+
+  /* ---------- Gamification ---------- */
+  .game-grid{display:grid; grid-template-columns:1.1fr 1fr; gap:20px;}
+  @media (max-width:900px){.game-grid{grid-template-columns:1fr;}}
+  .panel{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:26px;}
+  .prompt-title{font-size:12.5px; color:var(--muted); margin-bottom:4px;}
+  .prompt-q{font-family:var(--disp); font-weight:600; font-size:22px; margin-bottom:22px;}
+  .vs-row{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
+  .vs-side{font-size:13.5px; font-weight:600;}
+  .vs-pct{font-family:var(--mono); font-size:13px; color:var(--muted);}
+  .splitbar{
+    height:34px; border-radius:10px; overflow:hidden; display:flex; border:1px solid var(--line);
+    margin-bottom:8px;
+  }
+  .split-a{background:var(--coral); display:flex; align-items:center; padding-left:12px; color:#fff; font-family:var(--mono); font-size:12px; font-weight:600;}
+  .split-b{background:var(--bracu-blue); display:flex; align-items:center; justify-content:flex-end; padding-right:12px; color:#fff; font-family:var(--mono); font-size:12px; font-weight:600;}
+  .prompt-meta{font-size:12px; color:var(--muted); margin-top:14px; display:flex; justify-content:space-between; gap:12px;}
+
+  .leader-item{border-bottom:1px solid var(--line);}
+  .leader-item:last-of-type{border-bottom:none;}
+  .leader-row{
+    width:100%; background:none; border:none; font:inherit; color:inherit; text-align:left;
+    display:grid; grid-template-columns:24px minmax(0,1.3fr) minmax(0,1fr) 64px;
+    align-items:center; gap:14px; padding:13px 6px; border-radius:8px;
+    cursor:pointer; transition:background 0.15s ease;
+  }
+  .leader-row:hover, .leader-row[aria-expanded="true"]{background:var(--paper-dim);}
+  .leader-rank{font-family:var(--mono); font-weight:600; font-size:13px; color:var(--muted);}
+  .leader-item.lead .leader-rank{color:var(--gold);}
+  .leader-name{font-weight:600; font-size:14px; display:flex; flex-wrap:wrap; align-items:center; gap:4px 8px;}
+  .badge-leader{
+    font-family:var(--mono); font-size:9.5px; text-transform:uppercase; letter-spacing:0.05em;
+    background:var(--gold-dim); color:#8a6d00; padding:2px 7px; border-radius:100px;
+    white-space:nowrap;
+  }
+  .leader-bar-wrap{height:8px; background:var(--paper-dim); border-radius:100px; overflow:hidden;}
+  .leader-bar{height:100%; border-radius:100px; background:var(--eco-green);}
+  .leader-val{font-family:var(--mono); font-size:12.5px; color:var(--muted); text-align:right;}
+  .drill-hint{font-size:11px; color:var(--muted); margin-top:14px; display:flex; align-items:center; gap:6px;}
+
+  /* drilldown detail */
+  .drill-detail{padding:4px 6px 16px;}
+  .drill-detail[hidden]{display:none;}
+  .drill-detail-head{display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-bottom:10px;}
+  .drill-detail-head .name{font-weight:600; font-size:13.5px;}
+  .drill-detail-head .delta{font-family:var(--mono); font-size:11.5px; color:var(--eco-green); white-space:nowrap;}
+  .mini-trend{width:100%; height:60px; display:block; overflow:visible;}
+  .mini-axis{display:flex; justify-content:space-between; font-family:var(--mono); font-size:10.5px; color:var(--muted); margin-top:6px;}
+
+  /* ---------- Circular economy ---------- */
+  .circ-grid{display:grid; grid-template-columns:0.9fr 1.1fr; gap:32px; align-items:center;}
+  @media (max-width:900px){.circ-grid{grid-template-columns:1fr;}}
+  .ring-wrap{display:flex; justify-content:center;}
+  .ring-wrap svg{width:100%; max-width:320px; height:auto;}
+  .stage-list{display:flex; flex-direction:column; gap:0;}
+  .stage-item{
+    display:flex; gap:16px; padding:16px 0; border-bottom:1px solid var(--line);
+  }
+  .stage-item:last-child{border-bottom:none;}
+  .stage-num{
+    font-family:var(--mono); font-size:12px; color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0; background:var(--bracu-blue);
+    font-weight:600;
+  }
+  .stage-item.done .stage-num{background:var(--eco-green);}
+  .stage-body{flex:1;}
+  .stage-name{font-weight:600; font-size:14px; margin-bottom:4px;}
+  .stage-bar-wrap{height:6px; background:var(--paper-dim); border-radius:100px; overflow:hidden; margin-top:8px;}
+  .stage-bar{height:100%; border-radius:100px;}
+  .stage-pct{font-family:var(--mono); font-size:11.5px; color:var(--muted); margin-top:5px; display:block;}
+
+  .trend-panel{margin-top:24px;}
+  .trend-head{display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:4px 12px; margin-bottom:14px;}
+  .trend-head .t1{font-weight:600; font-size:14px;}
+  .trend-head .t2{font-family:var(--mono); font-size:12px; color:var(--eco-green);}
+  #trendChart{width:100%; height:180px; display:block;}
+
+  /* ---------- Live feed ---------- */
+  .feed-grid{display:grid; grid-template-columns:1.2fr 1fr; gap:20px; align-items:start;}
+  @media (max-width:900px){.feed-grid{grid-template-columns:1fr;}}
+  .feed-item{
+    display:flex; gap:14px; padding:14px 0; border-bottom:1px solid var(--line); align-items:flex-start;
+  }
+  .feed-item:first-child{padding-top:0;}
+  .feed-item:last-child{border-bottom:none; padding-bottom:0;}
+  .feed-dot{width:8px; height:8px; border-radius:50%; background:var(--eco-green); margin-top:6px; flex-shrink:0;}
+  .feed-dot.pending{background:var(--gold);}
+  .feed-dot.idle{background:var(--muted); opacity:0.4;}
+  .feed-text{font-size:13.5px;}
+  .feed-text b{font-weight:600;}
+  .feed-time{font-family:var(--mono); font-size:11px; color:var(--muted); margin-top:2px;}
+  .side-stack{display:flex; flex-direction:column; gap:16px;}
+  .integrity-box{
+    background:var(--bracu-blue-dim); border:1px solid rgba(27,79,156,0.2); border-radius:12px;
+    padding:18px; font-size:13px; color:var(--ink); display:flex; gap:12px; align-items:flex-start;
+  }
+  .integrity-box svg{flex-shrink:0; margin-top:2px;}
+  .legend{display:flex; flex-direction:column; gap:8px; font-size:12.5px; color:var(--muted); padding:0 4px;}
+  .legend span{display:flex; align-items:center; gap:10px;}
+  .legend .feed-dot{margin-top:0;}
+
+  /* ---------- Footer ---------- */
+  footer{padding:56px 0 60px;}
+  .foot-grid{display:grid; grid-template-columns:1fr auto; gap:40px; align-items:start;}
+  @media (max-width:760px){.foot-grid{grid-template-columns:1fr;}}
+  .team-list{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px;}
+  .team-chip{
+    background:var(--card); border:1px solid var(--line); border-radius:100px;
+    padding:8px 14px 8px 8px; display:flex; align-items:center; gap:9px; font-size:12.5px;
+  }
+  .team-avatar{
+    width:24px; height:24px; border-radius:50%; background:var(--bracu-blue);
+    color:#fff; font-family:var(--disp); font-size:10px; font-weight:600;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .countdown{
+    background:var(--ink); color:#fff; border-radius:var(--radius); padding:22px 26px; min-width:280px;
+  }
+  .countdown .cd-label{font-size:12px; color:rgba(255,255,255,0.6); margin-bottom:10px;}
+  .cd-nums{display:flex; gap:14px;}
+  .cd-block{text-align:center;}
+  .cd-block .n{font-family:var(--mono); font-weight:600; font-size:24px;}
+  .cd-block .l{font-size:10px; color:rgba(255,255,255,0.55); text-transform:uppercase; letter-spacing:0.06em; margin-top:2px;}
+  .cd-done{font-family:var(--disp); font-weight:600; font-size:20px;}
+  .cd-done small{display:block; font-family:var(--mono); font-weight:400; font-size:12px; color:rgba(255,255,255,0.6); margin-top:4px;}
+  .cd-note{font-size:11px; color:rgba(255,255,255,0.45); margin-top:14px;}
+
+  .foot-bottom{
+    margin-top:48px; padding-top:20px; border-top:1px solid var(--line);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+    font-size:12px; color:var(--muted);
+  }
+
+  @media (max-width:900px){
+    .cards{grid-template-columns:repeat(2,1fr);}
+  }
+  @media (max-width:560px){
+    .wrap, .top-inner{padding-left:16px; padding-right:16px;}
+    .cards{grid-template-columns:1fr;}
+    .hero-head{flex-direction:column; align-items:flex-start;}
+    .timeline-chip{align-items:flex-start; text-align:left;}
+    .pill{font-size:10.5px; padding:5px 10px;}
+    .panel{padding:20px;}
+    .leader-row{grid-template-columns:24px 1fr auto; row-gap:8px;}
+    .leader-bar-wrap{grid-column:2 / -1; grid-row:2;}
+    .equiv-chip{min-width:0; flex-basis:100%; flex-direction:column; align-items:flex-start; gap:4px;}
+    .countdown{min-width:0;}
+  }
+  @media (max-width:400px){
+    .pill .pill-extra{display:none;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    *, *::before, *::after{animation:none !important; transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="brandrow">
+      <div class="logo-mark">
+        <img src="assets/bracu-logo.png" alt="BRAC University logo" onerror="this.parentElement.textContent='BU';">
+      </div>
+      <div class="brandtext">
+        <span class="b1">Project Recycle Earth Impact</span>
+        <span class="b2">Plastic-to-Purpose Pilot · BRAC University</span>
+      </div>
+    </div>
+    <div class="top-right">
+      <span class="pill"><span class="dot"></span>Dashboard live<span class="pill-extra"> · demo data</span></span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- ============ HERO / TOP FOLD ============ -->
+  <section class="hero" id="impact">
+    <div class="hero-head">
+      <div>
+        <div class="eyebrow">Three schools · Dhaka · 3-month pilot</div>
+        <h1>Every vote is a vote of plastic.</h1>
+        <p class="hero-sub">Live snapshot of the youth-led plastic diversion pilot across three Dhaka schools — funded and coordinated by BRAC University student leads.</p>
+      </div>
+      <div class="timeline-chip">
+        <div class="timeline-label"><b id="weekNow">Week –</b> of <span id="weekTotal">–</span></div>
+        <div class="timeline-track" role="progressbar" aria-label="Pilot progress" id="timelineTrack"><div class="timeline-fill" id="timelineFill"></div></div>
+        <div class="timeline-label" style="font-size:11px;" id="pilotDates"></div>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card c1">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 12l4-2m-4 2l2 4"/></svg></div>
+        <div class="label">Total Plastic Diverted</div>
+        <div class="value"><span id="kpiGrams">0</span><span class="unit">g</span></div>
+        <div class="foot up" id="kpiGramsFoot"></div>
+      </div>
+      <div class="card c2">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6v6H9z"/></svg></div>
+        <div class="label">Items Counted</div>
+        <div class="value"><span id="kpiItems">0</span></div>
+        <div class="foot up" id="kpiItemsFoot"></div>
+      </div>
+      <div class="card c3">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div class="label">Micro-Economy Generated <span class="est-tag">est.</span></div>
+        <div class="value">৳<span id="kpiTaka">0</span></div>
+        <div class="foot">Earned by campus cleaning staff via resale</div>
+      </div>
+      <div class="card c4">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div class="label">Active Student Base</div>
+        <div class="value"><span id="kpiStudents">0</span></div>
+        <div class="foot" id="kpiStudentsFoot"></div>
+      </div>
+    </div>
+
+    <div class="equiv-row">
+      <div class="equiv-chip">
+        <div class="num" id="eqBottles"></div>
+        <div class="txt" id="eqBottlesTxt"></div>
+      </div>
+      <div class="equiv-chip">
+        <div class="num" id="eqCo2"></div>
+        <div class="txt" id="eqCo2Txt"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ GAMIFICATION ============ -->
+  <section id="gamification">
+    <div class="sec-head">
+      <div class="sec-eyebrow">02 · Engagement</div>
+      <h2 class="sec-title">The gamification leaderboard</h2>
+      <p class="sec-desc">Weekly prompts turn sorting plastic into a friendly, transparent competition between schools.</p>
+    </div>
+
+    <div class="game-grid">
+      <div class="panel">
+        <div class="prompt-title">This week's prompt</div>
+        <div class="prompt-q" id="promptQ"></div>
+        <div class="vs-row"><span class="vs-side" id="optAName"></span><span class="vs-pct" id="optAPct"></span></div>
+        <div class="splitbar" id="splitbar"></div>
+        <div class="vs-row"><span class="vs-side" id="optBName"></span><span class="vs-pct" id="optBPct"></span></div>
+        <div class="prompt-meta">
+          <span>By weight of plastic sorted into each bin section</span>
+          <span id="promptCloses"></span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="prompt-title" style="margin-bottom:14px;">School vs. school ranking · total waste collected</div>
+        <div id="leaderboard"></div>
+        <div class="drill-hint">↳ Click any school to see its individual weekly trend</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CIRCULAR ECONOMY MAP ============ -->
+  <section id="circular">
+    <div class="sec-head">
+      <div class="sec-eyebrow">03 · Transparency</div>
+      <h2 class="sec-title">The circular economy map</h2>
+      <p class="sec-desc">Proof that collected plastic actually completes the loop — not just moved to another landfill.</p>
+    </div>
+
+    <div class="circ-grid">
+      <div class="ring-wrap"><svg id="cycleRing" viewBox="0 0 320 320" role="img" aria-label="This week's recycling cycle"></svg></div>
+
+      <div>
+        <div class="stage-list" id="stageList"></div>
+
+        <div class="trend-panel">
+          <div class="trend-head">
+            <span class="t1">Plastic collected over time <span style="color:var(--muted); font-weight:400;">(cumulative, kg)</span></span>
+            <span class="t2" id="trendDelta"></span>
+          </div>
+          <svg id="trendChart" role="img" aria-label="Cumulative plastic collected per week"></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LIVE FEED / OPS ============ -->
+  <section id="ops">
+    <div class="sec-head">
+      <div class="sec-eyebrow">04 · Operations</div>
+      <h2 class="sec-title">This week's submissions</h2>
+      <p class="sec-desc">Weekly (not real-time) reporting — logged by ambassadors, verified by teachers, submitted once per school per week.</p>
+    </div>
+
+    <div class="feed-grid">
+      <div class="panel" id="feed"></div>
+
+      <div class="side-stack">
+        <div class="integrity-box">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B4F9C" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h7v7h-7z"/></svg>
+          <div>
+            <b>Data integrity.</b> Each of the 15 bins carries its own QR code, linking every submission to a specific school and bin section, so every gram logged traces back to exactly where it was sorted.
+          </div>
+        </div>
+        <div class="legend">
+          <span><span class="feed-dot"></span>Verified by a teacher</span>
+          <span><span class="feed-dot pending"></span>Awaiting teacher sign-off</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="sec-eyebrow">Built by</div>
+        <div class="sec-title" style="font-size:18px; margin-bottom:0;">BRACU student leads</div>
+        <div class="team-list">
+          <span class="team-chip"><span class="team-avatar">PL</span>Project Lead</span>
+          <span class="team-chip"><span class="team-avatar">AC</span>Ambassador Coordinator</span>
+          <span class="team-chip"><span class="team-avatar">DD</span>Data &amp; Dashboard Lead</span>
+          <span class="team-chip"><span class="team-avatar">CE</span>Climate Education Lead</span>
+        </div>
+      </div>
+      <div class="countdown">
+        <div class="cd-label">Closing ceremony &amp; awards — BRAC University campus</div>
+        <div id="countdown">
+          <div class="cd-nums">
+            <div class="cd-block"><div class="n" id="cd-d">00</div><div class="l">Days</div></div>
+            <div class="cd-block"><div class="n" id="cd-h">00</div><div class="l">Hrs</div></div>
+            <div class="cd-block"><div class="n" id="cd-m">00</div><div class="l">Min</div></div>
+            <div class="cd-block"><div class="n" id="cd-s">00</div><div class="l">Sec</div></div>
+          </div>
+        </div>
+        <div class="cd-note">Placeholder date for this demo build — swap for the real closing date before going live.</div>
+      </div>
+    </div>
+
+    <div class="foot-bottom">
+      <span>Circular Impact Dashboard · demo build with sample data</span>
+      <span>Plastic-to-Purpose Pilot · 3 schools · Dhaka · 2026</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // =====================================================================
+  //  DATA — the single source of truth for every number on the page.
+  //  In production this object would be built from the Google Form /
+  //  Sheet that ambassadors submit to; everything below is derived from it.
+  //  (All values are sample data for this demo build.)
+  // =====================================================================
+  const DATA = {
+    pilot: {
+      start: '2026-06-02',                       // first day of week 1
+      weeks: 12,
+      ceremony: '2026-08-25T15:00:00+06:00',     // Dhaka time
+    },
+    // kg collected per school, one entry per completed week
+    schools: [
+      { name: 'Uttara Campus',    weeklyKg: [6.2, 7.8, 9.1, 10.4, 11.3, 12.6, 15.0], submitted: '2026-07-18T16:12', verified: true  },
+      { name: 'Dhanmondi Campus', weeklyKg: [5.4, 6.8, 7.9,  8.6,  9.5, 10.6, 12.2], submitted: '2026-07-18T15:47', verified: true  },
+      { name: 'Mirpur Campus',    weeklyKg: [4.8, 5.9, 6.7,  7.6,  8.4,  9.6, 11.0], submitted: '2026-07-18T17:30', verified: false },
+    ],
+    items:    { total: 9842, lastWeekDelta: 640 },
+    resaleBDT: 14200,
+    students: { active: 612, ambassadors: 45, teachers: 3 },
+    // this week's "ballot bin" prompt — kg sorted into each bin section
+    prompt: {
+      question: 'Messi 🐐 vs. Ronaldo 🚀 — who\'s the GOAT?',
+      options: [ { name: 'Messi', kg: 22.2 }, { name: 'Ronaldo', kg: 16.0 } ],
+      closes: 'Fri, 6 PM',
+    },
+    // share of this week's plastic that has reached each stage of the loop
+    stages: [
+      { name: 'Collected',                short: 'Collected',  pct: 100, note: 'pulled from bins by ambassadors, teacher present' },
+      { name: 'Weighed & logged',         short: 'Weighed',    pct: 100, note: 'logged via QR code → Google Form → dashboard' },
+      { name: 'Handed to cleaning staff', short: 'Handed off', pct: 85,  note: 'remainder handover scheduled Monday' },
+      { name: 'Sold in local market',     short: 'Sold',       pct: 60,  note: 'sale proceeds kept by campus cleaning staff' },
+    ],
+  };
+
+  // Rough conversion factors for the "equivalent" chips (illustrative only)
+  const BOTTLE_GRAMS = 30;       // typical empty 1-litre PET bottle
+  const CO2E_PER_KG  = 1.0;      // conservative kg CO₂e avoided per kg recycled vs. burned/landfilled
+
+  // ---------- helpers ----------
+  const $ = id => document.getElementById(id);
+  const sum = arr => arr.reduce((a, b) => a + b, 0);
+  const round1 = n => Math.round(n * 10) / 10;
+  const fmt = n => n.toLocaleString('en-US');
+  const kg = n => round1(n).toFixed(1) + ' kg';
+  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  // parse 'YYYY-MM-DD[THH:MM]' as a plain calendar date/time (no timezone shifting)
+  function parseLocal(s){
+    const [d, t = '00:00'] = s.split('T');
+    const [y, mo, da] = d.split('-').map(Number);
+    const [h, mi] = t.split(':').map(Number);
+    return new Date(y, mo - 1, da, h, mi);
+  }
+  const fmtDay = d => `${d.getDate()} ${MONTHS[d.getMonth()]}`;
+  const fmtTime = d => `${(d.getHours() % 12) || 12}:${String(d.getMinutes()).padStart(2,'0')} ${d.getHours() < 12 ? 'AM' : 'PM'}`;
+  const SVG_MONO = "font-family=\"'IBM Plex Mono', ui-monospace, monospace\"";
+  const SVG_DISP = "font-family=\"'Space Grotesk', system-ui, sans-serif\"";
+
+  // ---------- derived values ----------
+  const weeksDone   = DATA.schools[0].weeklyKg.length;
+  const schoolTotal = s => round1(sum(s.weeklyKg));
+  const weeklyTotals = Array.from({ length: weeksDone }, (_, i) => round1(sum(DATA.schools.map(s => s.weeklyKg[i]))));
+  const cumulative  = weeklyTotals.map((_, i) => round1(sum(weeklyTotals.slice(0, i + 1))));
+  const totalKg     = cumulative[cumulative.length - 1];
+  const thisWeekKg  = weeklyTotals[weeksDone - 1];
+  const lastWeekKg  = weeklyTotals[weeksDone - 2] || 0;
+
+  // ---------- timeline ----------
+  (function(){
+    const start = parseLocal(DATA.pilot.start);
+    const end = new Date(start); end.setDate(end.getDate() + DATA.pilot.weeks * 7);
+    const pct = Math.round(weeksDone / DATA.pilot.weeks * 100);
+    $('weekNow').textContent = 'Week ' + weeksDone;
+    $('weekTotal').textContent = DATA.pilot.weeks;
+    $('timelineFill').style.width = pct + '%';
+    $('timelineTrack').setAttribute('aria-valuenow', pct);
+    $('pilotDates').textContent = `Pilot began ${fmtDay(start)} · ends ${fmtDay(end)} ${end.getFullYear()}`;
+  })();
+
+  // ---------- KPI cards (animated counters) ----------
+  function animateCount(el, target){
+    const duration = 1400;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduce){ el.textContent = fmt(target); return; }
+    const start = performance.now();
+    (function frame(now){
+      const p = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = fmt(p < 1 ? Math.floor(target * eased) : target);
+      if(p < 1) requestAnimationFrame(frame);
+    })(start);
+  }
+  const weekDiff = round1(thisWeekKg - lastWeekKg);
+  animateCount($('kpiGrams'), Math.round(totalKg * 1000));
+  $('kpiGramsFoot').textContent = `${weekDiff >= 0 ? '↑' : '↓'} ${kg(Math.abs(weekDiff))} vs. last week`;
+  $('kpiGramsFoot').classList.toggle('up', weekDiff >= 0);
+  animateCount($('kpiItems'), DATA.items.total);
+  $('kpiItemsFoot').textContent = `↑ ${fmt(DATA.items.lastWeekDelta)} items vs. last week`;
+  animateCount($('kpiTaka'), DATA.resaleBDT);
+  animateCount($('kpiStudents'), DATA.students.active);
+  $('kpiStudentsFoot').textContent = `${DATA.students.ambassadors} ambassadors · ${DATA.schools.length} schools · ${DATA.students.teachers} teachers`;
+
+  // ---------- equivalences ----------
+  $('eqBottles').textContent = `≈ ${fmt(Math.round(totalKg * 1000 / BOTTLE_GRAMS))} bottles`;
+  $('eqBottlesTxt').textContent = `One-litre-bottle equivalent of the plastic diverted so far (at ~${BOTTLE_GRAMS} g per bottle) — a more intuitive read than raw grams alone.`;
+  $('eqCo2').textContent = `≈ ${fmt(Math.round(totalKg * CO2E_PER_KG))} kg CO₂e`;
+  $('eqCo2Txt').textContent = `Conservative emissions-avoided estimate (~${CO2E_PER_KG} kg CO₂e per kg) from recycling this plastic instead of open burning or landfill.`;
+
+  // ---------- weekly prompt ----------
+  (function(){
+    const [a, b] = DATA.prompt.options;
+    const pa = Math.round(a.kg / (a.kg + b.kg) * 100), pb = 100 - pa;
+    $('promptQ').textContent = DATA.prompt.question;
+    $('optAName').textContent = a.name; $('optAPct').textContent = `${pa}% · ${kg(a.kg)}`;
+    $('optBName').textContent = b.name; $('optBPct').textContent = `${pb}% · ${kg(b.kg)}`;
+    $('splitbar').innerHTML = `<div class="split-a" style="width:${pa}%;">${pa}%</div><div class="split-b" style="width:${pb}%;">${pb}%</div>`;
+    $('splitbar').setAttribute('aria-label', `${a.name} ${pa}%, ${b.name} ${pb}%`);
+    $('promptCloses').textContent = 'Closes ' + DATA.prompt.closes;
+  })();
+
+  // ---------- leaderboard + drilldown ----------
+  (function(){
+    const ranked = DATA.schools.map(s => ({ ...s, total: schoolTotal(s) })).sort((x, y) => y.total - x.total);
+    const top = ranked[0].total;
+    $('leaderboard').innerHTML = ranked.map((s, i) => {
+      const id = 'drill-' + i, lead = i === 0, color = lead ? 'var(--gold)' : 'var(--eco-green)';
+      const w = s.weeklyKg, lo = Math.min(...w), hi = Math.max(...w);
+      const pts = w.map((v, j) => `${(j / (w.length - 1) * 300).toFixed(1)},${(54 - (v - lo) / (hi - lo || 1) * 48).toFixed(1)}`).join(' ');
+      const growth = Math.round((w[w.length - 1] / w[0] - 1) * 100);
+      return `
+        <div class="leader-item${lead ? ' lead' : ''}">
+          <button type="button" class="leader-row" aria-expanded="false" aria-controls="${id}">
+            <span class="leader-rank">${String(i + 1).padStart(2, '0')}</span>
+            <span class="leader-name">${s.name}${lead ? '<span class="badge-leader">★ Current leader</span>' : ''}</span>
+            <span class="leader-bar-wrap"><span class="leader-bar" style="display:block; width:${(s.total / top * 100).toFixed(1)}%; background:${color};"></span></span>
+            <span class="leader-val">${kg(s.total)}</span>
+          </button>
+          <div class="drill-detail" id="${id}" hidden>
+            <div class="drill-detail-head">
+              <span class="name">${s.name} — kg collected per week</span>
+              <span class="delta">W1 → W${w.length}: ${growth >= 0 ? '+' : ''}${growth}%</span>
+            </div>
+            <svg class="mini-trend" viewBox="0 0 300 60" preserveAspectRatio="none" aria-hidden="true">
+              <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+            </svg>
+            <div class="mini-axis"><span>W1 · ${kg(w[0])}</span><span>W${w.length} · ${kg(w[w.length - 1])}</span></div>
+          </div>
+        </div>`;
+    }).join('');
+
+    $('leaderboard').addEventListener('click', e => {
+      const btn = e.target.closest('.leader-row');
+      if(!btn) return;
+      const open = btn.getAttribute('aria-expanded') === 'true';
+      $('leaderboard').querySelectorAll('.leader-row').forEach(b => {
+        b.setAttribute('aria-expanded', 'false');
+        $(b.getAttribute('aria-controls')).hidden = true;
+      });
+      if(!open){
+        btn.setAttribute('aria-expanded', 'true');
+        $(btn.getAttribute('aria-controls')).hidden = false;
+      }
+    });
+  })();
+
+  // ---------- circular economy: ring + stage list ----------
+  (function(){
+    const stageColor = p => p >= 100 ? ['#1E9E5A', '#e5f6ec'] : p >= 75 ? ['#1B4F9C', '#e8eef8'] : ['#E8A93B', '#fdf3df'];
+    const R = 128, C = 2 * Math.PI * R;
+    const overall = Math.round(sum(DATA.stages.map(s => s.pct)) / DATA.stages.length);
+    const nodes = DATA.stages.map((s, i) => {
+      const ang = -Math.PI / 2 + i * 2 * Math.PI / DATA.stages.length;
+      const x = 160 + R * Math.cos(ang), y = 160 + R * Math.sin(ang);
+      const [stroke, fill] = stageColor(s.pct);
+      return `<circle cx="${x}" cy="${y}" r="27" fill="${fill}" stroke="${stroke}" stroke-width="1.5"/>
+        <text x="${x}" y="${y - 1}" text-anchor="middle" font-size="10.5" font-weight="600" fill="#10233F">${s.pct}%</text>
+        <text x="${x}" y="${y + 11}" text-anchor="middle" font-size="7.5" fill="#5B6B82">${s.short}</text>`;
+    }).join('');
+    $('cycleRing').innerHTML = `
+      <circle cx="160" cy="160" r="${R}" fill="none" stroke="rgba(16,35,63,0.12)" stroke-width="1"/>
+      <circle cx="160" cy="160" r="${R}" fill="none" stroke="#1E9E5A" stroke-width="3" stroke-linecap="round"
+        stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C * (1 - overall / 100)).toFixed(1)}" transform="rotate(-90 160 160)"/>
+      <g ${SVG_MONO}>${nodes}</g>
+      <text x="160" y="152" text-anchor="middle" ${SVG_DISP} font-size="13" font-weight="600" fill="#10233F">This week's cycle</text>
+      <text x="160" y="178" text-anchor="middle" ${SVG_DISP} font-size="24" font-weight="600" fill="#1E9E5A">${overall}%</text>
+      <text x="160" y="194" text-anchor="middle" ${SVG_MONO} font-size="9" fill="#5B6B82">loop completion</text>`;
+    $('cycleRing').setAttribute('aria-label', `This week's recycling cycle: ${overall}% loop completion`);
+
+    $('stageList').innerHTML = DATA.stages.map((s, i) => `
+      <div class="stage-item${s.pct >= 100 ? ' done' : ''}">
+        <div class="stage-num">${i + 1}</div>
+        <div class="stage-body">
+          <div class="stage-name">${s.name.replace('&', '&amp;')}</div>
+          <div class="stage-bar-wrap"><div class="stage-bar" style="width:${s.pct}%; background:${stageColor(s.pct)[0]};"></div></div>
+          <span class="stage-pct">${s.pct}% · ${s.note}</span>
+        </div>
+      </div>`).join('');
+  })();
+
+  // ---------- trend chart (responsive SVG line, cumulative kg) ----------
+  function drawTrend(){
+    const svg = $('trendChart');
+    const w = Math.max(svg.clientWidth, 280), h = 180, padL = 40, padB = 24, padT = 14, padR = 12;
+    const step = 50, max = Math.ceil(totalKg * 1.1 / step) * step;
+    const stepX = (w - padL - padR) / (cumulative.length - 1);
+    const X = i => padL + i * stepX;
+    const Y = v => h - padB - (v / max) * (h - padB - padT);
+
+    let grid = '', line = '', dots = '', labels = '';
+    for(let v = 0; v <= max; v += step){
+      grid += `<line x1="${padL}" y1="${Y(v)}" x2="${w - padR}" y2="${Y(v)}" stroke="rgba(16,35,63,0.10)" stroke-width="1"/>
+               <text x="${padL - 8}" y="${Y(v) + 3}" text-anchor="end" ${SVG_MONO} font-size="9.5" fill="#5B6B82">${v}</text>`;
+    }
+    cumulative.forEach((v, i) => {
+      line += `${i ? 'L' : 'M'}${X(i)},${Y(v)} `;
+      dots += `<circle cx="${X(i)}" cy="${Y(v)}" r="3.5" fill="#1E9E5A" stroke="#fff" stroke-width="1.5"><title>Week ${i + 1}: ${kg(v)} total (+${kg(weeklyTotals[i])})</title></circle>`;
+      labels += `<text x="${X(i)}" y="${h - 4}" text-anchor="middle" ${SVG_MONO} font-size="9.5" fill="#5B6B82">W${i + 1}</text>`;
+    });
+    const area = `${line}L${X(cumulative.length - 1)},${Y(0)} L${X(0)},${Y(0)} Z`;
+
+    svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    svg.innerHTML = `
+      <defs>
+        <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1E9E5A" stop-opacity="0.22"/>
+          <stop offset="100%" stop-color="#1E9E5A" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      ${grid}
+      <path d="${area}" fill="url(#areaGrad)"/>
+      <path d="${line}" fill="none" stroke="#1E9E5A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      ${dots}
+      ${labels}`;
+  }
+  $('trendDelta').textContent = `↑ +${kg(thisWeekKg)} in week ${weeksDone}`;
+  drawTrend();
+  new ResizeObserver(drawTrend).observe($('trendChart'));
+
+  // ---------- this week's submissions feed ----------
+  (function(){
+    const rows = [...DATA.schools]
+      .sort((a, b) => parseLocal(b.submitted) - parseLocal(a.submitted))
+      .map(s => {
+        const d = parseLocal(s.submitted);
+        return `
+          <div class="feed-item">
+            <span class="feed-dot${s.verified ? '' : ' pending'}" title="${s.verified ? 'Verified by teacher' : 'Awaiting teacher sign-off'}"></span>
+            <div>
+              <div class="feed-text"><b>${kg(s.weeklyKg[weeksDone - 1])}</b> logged by Ambassador — ${s.name}</div>
+              <div class="feed-time">Submitted ${DAYS[d.getDay()]}, ${fmtDay(d)} · ${fmtTime(d)}${s.verified ? '' : ' · awaiting sign-off'}</div>
+            </div>
+          </div>`;
+      }).join('');
+    $('feed').innerHTML = rows + `
+      <div class="feed-item">
+        <span class="feed-dot idle"></span>
+        <div>
+          <div class="feed-text" style="color:var(--muted);">Week ${weeksDone + 1} submissions open Friday</div>
+          <div class="feed-time">Reporting is weekly, not continuous, by design</div>
+        </div>
+      </div>`;
+  })();
+
+  // ---------- countdown to closing ceremony ----------
+  (function(){
+    const target = new Date(DATA.pilot.ceremony);
+    const pad = n => String(n).padStart(2, '0');
+    let timer = null;
+    function update(){
+      let diff = target - Date.now();
+      if(diff <= 0){
+        clearInterval(timer);
+        const d = parseLocal(DATA.pilot.ceremony.slice(0, 16));
+        $('countdown').innerHTML = `<div class="cd-done">Ceremony held 🎉<small>${DAYS[d.getDay()]}, ${fmtDay(d)} ${d.getFullYear()} · ${fmtTime(d)}</small></div>`;
+        return false;
+      }
+      const dd = Math.floor(diff / 86400000); diff -= dd * 86400000;
+      const hh = Math.floor(diff / 3600000);  diff -= hh * 3600000;
+      const mm = Math.floor(diff / 60000);    diff -= mm * 60000;
+      $('cd-d').textContent = pad(dd);
+      $('cd-h').textContent = pad(hh);
+      $('cd-m').textContent = pad(mm);
+      $('cd-s').textContent = pad(Math.floor(diff / 1000));
+    }
+    if(update() !== false) timer = setInterval(update, 1000);
+  })();
+</script>
+
+</body>
+</html>
