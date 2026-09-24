@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Project Recycle Earth Impact — Plastic-to-Purpose Dashboard</title>
-<meta name="description" content="Impact dashboard for Project Recycle Earth, a youth-led plastic diversion pilot across three Dhaka schools, coordinated by BRAC University students.">
+<title>Project Recycle Earth Impact — Plastic-to-Purpose Dashboard (Sample Data)</title>
+<meta name="description" content="Impact dashboard for Project Recycle Earth, a youth-led plastic diversion pilot across three Dhaka schools, coordinated by BRAC University students. Demo build: all figures are sample data, not real results.">
 <meta name="theme-color" content="#1B4F9C">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%231E9E5A'/%3E%3Cpath d='M6 12a6 6 0 1 0 6-6M6 12l2.7-1.3M6 12l1.3 2.7' fill='none' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -78,11 +78,23 @@
     color:var(--eco-green); border:1px solid rgba(30,158,90,0.25);
     display:flex; align-items:center; gap:6px; white-space:nowrap;
   }
+  .pill.sample{background:var(--gold-dim); color:#8a6d00; border-color:rgba(232,169,59,0.45);}
+  .pill.sample .dot{background:var(--gold);}
+  .sample-banner{
+    margin-top:24px; display:flex; gap:10px; align-items:flex-start;
+    background:var(--gold-dim); border:1px solid rgba(232,169,59,0.45); border-radius:12px;
+    padding:12px 16px; font-size:13px; color:#6b5400;
+  }
+  .sample-banner svg{flex-shrink:0; margin-top:1px;}
+  .sample-tag{
+    font-family:var(--mono); font-size:9.5px; text-transform:uppercase; letter-spacing:0.06em;
+    background:var(--gold-dim); color:#8a6d00; padding:2px 7px; border-radius:100px; margin-left:4px;
+  }
   .pill .dot{width:6px; height:6px; border-radius:50%; background:var(--eco-green); animation:pulse 2s infinite;}
   @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:0.35;}}
 
   /* ---------- Hero / top-fold ---------- */
-  .hero{padding:44px 0 8px;}
+  .hero{padding:28px 0 8px;}
   .hero-head{
     display:flex; justify-content:space-between; align-items:flex-end;
     flex-wrap:wrap; gap:18px; margin-bottom:28px;
@@ -339,19 +351,23 @@
       </div>
     </div>
     <div class="top-right">
-      <span class="pill"><span class="dot"></span>Dashboard live<span class="pill-extra"> · demo data</span></span>
+      <span class="pill sample"><span class="dot"></span>Demo<span class="pill-extra"> · sample data</span></span>
     </div>
   </div>
 </header>
 
 <main class="wrap">
+  <div class="sample-banner" role="note">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+    <span><b>Sample data only.</b> This is a demo build. Every number, metric, chart and submission on this dashboard is made up for illustration and does not reflect real pilot results.</span>
+  </div>
   <!-- ============ HERO / TOP FOLD ============ -->
   <section class="hero" id="impact">
     <div class="hero-head">
       <div>
-        <div class="eyebrow">Three schools · Dhaka · 3-month pilot</div>
+        <div class="eyebrow">Three schools · Dhaka · 3-month pilot <span class="sample-tag">Sample data</span></div>
         <h1>Every vote is a vote of plastic.</h1>
-        <p class="hero-sub">Live snapshot of the youth-led plastic diversion pilot across three Dhaka schools — funded and coordinated by BRAC University student leads.</p>
+        <p class="hero-sub">Illustrative snapshot of the youth-led plastic diversion pilot across three Dhaka schools — funded and coordinated by BRAC University student leads.</p>
       </div>
       <div class="timeline-chip">
         <div class="timeline-label"><b id="weekNow">Week –</b> of <span id="weekTotal">–</span></div>
@@ -402,7 +418,7 @@
   <!-- ============ GAMIFICATION ============ -->
   <section id="gamification">
     <div class="sec-head">
-      <div class="sec-eyebrow">02 · Engagement</div>
+      <div class="sec-eyebrow">02 · Engagement <span class="sample-tag">Sample data</span></div>
       <h2 class="sec-title">The gamification leaderboard</h2>
       <p class="sec-desc">Weekly prompts turn sorting plastic into a friendly, transparent competition between schools.</p>
     </div>
@@ -431,7 +447,7 @@
   <!-- ============ CIRCULAR ECONOMY MAP ============ -->
   <section id="circular">
     <div class="sec-head">
-      <div class="sec-eyebrow">03 · Transparency</div>
+      <div class="sec-eyebrow">03 · Transparency <span class="sample-tag">Sample data</span></div>
       <h2 class="sec-title">The circular economy map</h2>
       <p class="sec-desc">Proof that collected plastic actually completes the loop — not just moved to another landfill.</p>
     </div>
@@ -456,7 +472,7 @@
   <!-- ============ LIVE FEED / OPS ============ -->
   <section id="ops">
     <div class="sec-head">
-      <div class="sec-eyebrow">04 · Operations</div>
+      <div class="sec-eyebrow">04 · Operations <span class="sample-tag">Sample data</span></div>
       <h2 class="sec-title">This week's submissions</h2>
       <p class="sec-desc">Weekly (not real-time) reporting — logged by ambassadors, verified by teachers, submitted once per school per week.</p>
     </div>
@@ -504,12 +520,12 @@
             <div class="cd-block"><div class="n" id="cd-s">00</div><div class="l">Sec</div></div>
           </div>
         </div>
-        <div class="cd-note">Placeholder date for this demo build — swap for the real closing date before going live.</div>
+        <div class="cd-note">Placeholder date — sample data for this demo build, not a real event date.</div>
       </div>
     </div>
 
     <div class="foot-bottom">
-      <span>Circular Impact Dashboard · demo build with sample data</span>
+      <span>Circular Impact Dashboard · demo build · all figures are sample data, not real results</span>
       <span>Plastic-to-Purpose Pilot · 3 schools · Dhaka · 2026</span>
     </div>
   </div>
@@ -520,7 +536,8 @@
   //  DATA — the single source of truth for every number on the page.
   //  In production this object would be built from the Google Form /
   //  Sheet that ambassadors submit to; everything below is derived from it.
-  //  (All values are sample data for this demo build.)
+  //  NOTE: all values below are made-up SAMPLE DATA for this demo build;
+  //  they are not real measurements from the pilot.
   // =====================================================================
   const DATA = {
     pilot: {
