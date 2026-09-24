@@ -4,13 +4,18 @@ A single-page impact dashboard for **Project Recycle Earth's Plastic-to-Purpose 
 
 **[Live demo →](https://sandipkumarpaul.github.io/Project-Recycle-Earth_Dashboard/)**
 
-![Dashboard screenshot](docs/screenshot.png)
+> [!IMPORTANT]
+> **This is a sample / demo build.** All numbers, metrics, charts, rankings and submissions shown on the dashboard (and in the screenshot below) are made-up sample data for illustration. They are **not** real results from the pilot.
+
+![Dashboard screenshot (sample data)](docs/screenshot.png)
+
+<sub>Screenshot shows illustrative sample data, not real figures.</sub>
 
 ## About the pilot
 
 Students "vote with plastic": each week, bins are split into two sections for a fun prompt (*Messi vs. Ronaldo?*), and the plastic sorted into each side counts as a vote. Every bin carries its own QR code. Ambassadors weigh and log the plastic through a Google Form, and a teacher verifies each entry. The collected plastic then goes to campus cleaning staff, who sell it in the local market and keep the proceeds.
 
-The dashboard makes that loop visible to students, teachers and sponsors.
+The dashboard is designed to make that loop visible to students, teachers and sponsors. This repository contains a demo version filled with sample data.
 
 ## Features
 
@@ -41,7 +46,7 @@ Then visit <http://localhost:8000>.
 
 ## Updating the data
 
-Edit the `DATA` object in `index.html`. To add a week, append one value to each school's `weeklyKg` array. The week counter, KPIs, leaderboard, chart and feed all update from that. The two conversion factors, `BOTTLE_GRAMS` and `CO2E_PER_KG`, sit just below the object.
+Edit the `DATA` object in `index.html`. It currently holds sample values only; replace them with real figures before using the dashboard for reporting. To add a week, append one value to each school's `weeklyKg` array. The week counter, KPIs, leaderboard, chart and feed all update from that. The two conversion factors, `BOTTLE_GRAMS` and `CO2E_PER_KG`, sit just below the object.
 
 ## Project structure
 
@@ -53,4 +58,4 @@ Edit the `DATA` object in `index.html`. To add a week, append one value to each 
     └── screenshot.png
 ```
 
-> **Note:** every figure on the dashboard is sample data from a demo build. The CO₂e and bottle equivalents use rough, illustrative factors.
+> **Disclaimer:** every figure on the dashboard is made-up sample data from a demo build. None of it reflects real measurements. The CO₂e and bottle equivalents also use rough, illustrative factors.
