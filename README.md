@@ -1,6 +1,6 @@
 # Project Recycle Earth — Impact Dashboard
 
-A single-page impact dashboard for **Project Recycle Earth's Plastic-to-Purpose pilot**, a youth-led plastic diversion programme run across three schools in Dhaka and coordinated by BRAC University students.
+A single-page impact dashboard for **Project Recycle Earth's Plastic-to-Purpose pilot**, a youth-led plastic diversion programme run across three schools in Dhaka and coordinated by BRAC University students. Co-developed by Sandip Kumar Paul and Tanjila Afsari Rubina.
 
 **[Live demo →](https://sandipkumarpaul.github.io/Project-Recycle-Earth_Dashboard/)**
 
